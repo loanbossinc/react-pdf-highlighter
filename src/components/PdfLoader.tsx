@@ -3,6 +3,14 @@ import React, { Component } from "react";
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf";
 import type { PDFDocumentProxy } from "pdfjs-dist/types/display/api";
 
+// Set up PDF worker at module initialization
+const workerSrc = new URL(
+  'pdfjs-dist/legacy/build/pdf.worker.min.js',
+  import.meta.url
+).toString();
+console.log('[PdfLoader-src] Setting worker URL to:', workerSrc);
+GlobalWorkerOptions.workerSrc = workerSrc;
+
 interface Props {
   /** See `GlobalWorkerOptionsType`. */
   workerSrc: string;

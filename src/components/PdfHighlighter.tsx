@@ -1,5 +1,5 @@
-import React, { PointerEventHandler, PureComponent } from "react";
-import ReactDom from "react-dom";
+import { PointerEventHandler, PureComponent } from "react";
+import { createRoot, Root } from "react-dom/client";
 import debounce from "lodash.debounce";
 
 import {
@@ -123,6 +123,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   resizeObserver: ResizeObserver | null = null;
   containerNode?: HTMLDivElement | null = null;
   unsubscribe = () => {};
+  highlightRoots: Map<number, Root> = new Map();
 
   constructor(props: Props<T_HT>) {
     super(props);
@@ -176,6 +177,12 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   init() {
     const { pdfDocument } = this.props;
 
+    // Clean up existing roots when loading a new PDF
+    this.highlightRoots.forEach((root) => {
+      root.unmount();
+    });
+    this.highlightRoots.clear();
+
     this.viewer =
       this.viewer ||
       new PDFViewer({
@@ -196,6 +203,11 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   componentWillUnmount() {
     this.unsubscribe();
+    // Clean up all React roots
+    this.highlightRoots.forEach((root) => {
+      root.unmount();
+    });
+    this.highlightRoots.clear();
   }
 
   findOrCreateHighlightLayer(page: number) {
@@ -291,7 +303,14 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
       const highlightLayer = this.findOrCreateHighlightLayer(pageNumber);
 
       if (highlightLayer) {
-        ReactDom.render(
+        // Get or create root for this page
+        let root = this.highlightRoots.get(pageNumber);
+        if (!root) {
+          root = createRoot(highlightLayer);
+          this.highlightRoots.set(pageNumber, root);
+        }
+
+        root.render(
           <div>
             {(highlightsByPage[String(pageNumber)] || []).map(
               ({ position, id, ...highlight }, index) => {
@@ -331,8 +350,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
                 );
               }
             )}
-          </div>,
-          highlightLayer
+          </div>
         );
       }
     }
