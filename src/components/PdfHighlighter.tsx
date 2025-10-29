@@ -1,3 +1,4 @@
+import React from "react";
 import { PointerEventHandler, PureComponent } from "react";
 import { createRoot, Root } from "react-dom/client";
 import debounce from "lodash.debounce";
