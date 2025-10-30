@@ -16,7 +16,7 @@ async function highlight(start, end) {
 jest.setTimeout(30000);
 
 beforeAll(async () => {
-  await page.goto("http://localhost:3000");
+  await page.goto("http://localhost:3000/react-pdf-highlighter/");
 });
 
 it("should display highlights", async () => {
