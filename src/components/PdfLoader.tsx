@@ -8,9 +8,9 @@ interface Props {
   workerSrc: string;
 
   url: string;
-  beforeLoad: JSX.Element;
-  errorMessage?: JSX.Element;
-  children: (pdfDocument: PDFDocumentProxy) => JSX.Element;
+  beforeLoad: React.JSX.Element;
+  errorMessage?: React.JSX.Element;
+  children: (pdfDocument: PDFDocumentProxy) => React.JSX.Element;
   onError?: (error: Error) => void;
   cMapUrl?: string;
   cMapPacked?: boolean;

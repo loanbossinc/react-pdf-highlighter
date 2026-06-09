@@ -56,10 +56,10 @@ interface State<T_HT> {
   range: Range | null;
   tip: {
     highlight: T_ViewportHighlight<T_HT>;
-    callback: (highlight: T_ViewportHighlight<T_HT>) => JSX.Element;
+    callback: (highlight: T_ViewportHighlight<T_HT>) => React.JSX.Element;
   } | null;
   tipPosition: Position | null;
-  tipChildren: JSX.Element | null;
+  tipChildren: React.JSX.Element | null;
   isAreaSelectionInProgress: boolean;
   scrolledToHighlightId: string;
 }
@@ -70,13 +70,13 @@ interface Props<T_HT> {
     index: number,
     setTip: (
       highlight: T_ViewportHighlight<T_HT>,
-      callback: (highlight: T_ViewportHighlight<T_HT>) => JSX.Element
+      callback: (highlight: T_ViewportHighlight<T_HT>) => React.JSX.Element
     ) => void,
     hideTip: () => void,
     viewportToScaled: (rect: LTWH) => Scaled,
     screenshot: (position: LTWH) => string,
     isScrolledTo: boolean
-  ) => JSX.Element;
+  ) => React.JSX.Element;
   highlights: Array<T_HT>;
   onScrollChange: () => void;
   scrollRef: (scrollTo: (highlight: IHighlight) => void) => void;
@@ -87,7 +87,7 @@ interface Props<T_HT> {
     content: { text?: string; image?: string },
     hideTipAndSelection: () => void,
     transformSelection: () => void
-  ) => JSX.Element | null;
+  ) => React.JSX.Element | null;
   enableAreaSelection: (event: MouseEvent) => boolean;
 }
 
@@ -241,7 +241,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
       }, {} as Record<number, any[]>);
   }
 
-  showTip(highlight: T_ViewportHighlight<T_HT>, content: JSX.Element) {
+  showTip(highlight: T_ViewportHighlight<T_HT>, content: React.JSX.Element) {
     const { isCollapsed, ghostHighlight, isAreaSelectionInProgress } =
       this.state;
 
@@ -368,7 +368,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
     );
   };
 
-  setTip(position: Position, inner: JSX.Element | null) {
+  setTip(position: Position, inner: React.JSX.Element | null) {
     this.setState({
       tipPosition: position,
       tipChildren: inner,
