@@ -58,7 +58,7 @@ npm run format
 ```
 
 ## Publishing
-The library is published as `react-pdf-highlighter` v5.3.0. The `files` field in `package.json` limits the published output to `dist/`.
+The library is published as `@loanbossinc/react-pdf-highlighter` v5.4.0. The `files` field in `package.json` limits the published output to `dist/`.
 
 ## Entry Points
 | Format | Path |
@@ -68,5 +68,5 @@ The library is published as `react-pdf-highlighter` v5.3.0. The `files` field in
 | Types | `./dist/esm/index.d.ts` |
 
 ## Notes
-- Styles must be imported separately: `import 'react-pdf-highlighter/dist/esm/style/...'`
+- Styles must be imported separately: `import '@loanbossinc/react-pdf-highlighter/dist/esm/style/...'`
 - Peer dependencies (`react`, `react-dom`) must be installed by the consuming application

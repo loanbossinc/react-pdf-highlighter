@@ -1,13 +1,17 @@
 import { defineConfig } from "vite";
-import reactRefresh from "@vitejs/plugin-react-refresh";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   base: "/react-pdf-highlighter/",
   build: {
     outDir: "dist",
   },
-  plugins: [reactRefresh()],
+  plugins: [react()],
+  esbuild: { target: "es2019" },
+  optimizeDeps: { esbuildOptions: { target: "es2019" } },
   server: {
+    port: 3000,
+    strictPort: true,
     proxy: {
       "/pdf-proxy": {
         target: "https://arxiv.org",

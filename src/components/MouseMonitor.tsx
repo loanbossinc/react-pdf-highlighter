@@ -4,7 +4,7 @@ interface Props {
   onMoveAway: () => void;
   paddingX: number;
   paddingY: number;
-  children: JSX.Element;
+  children: React.JSX.Element;
 }
 
 class MouseMonitor extends Component<Props> {
