@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { type JSX, useState } from "react";
 import { MouseMonitor } from "./MouseMonitor";
 
 interface Props {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, type JSX } from "react";
 
 interface Props {
   onMoveAway: () => void;

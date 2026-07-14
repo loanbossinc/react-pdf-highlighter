@@ -1,6 +1,6 @@
 import { GlobalWorkerOptions, getDocument } from "pdfjs-dist";
 import type { PDFDocumentProxy } from "pdfjs-dist";
-import React, { Component } from "react";
+import React, { Component, type JSX } from "react";
 
 interface Props {
   /** See `GlobalWorkerOptionsType`. */

@@ -1,6 +1,6 @@
 {
-  "name": "react-pdf-highlighter",
-  "version": "8.0.0-rc.0",
+  "name": "@loanbossinc/react-pdf-highlighter",
+  "version": "8.0.0",
   "description": "Set of React components for PDF annotation",
   "author": "Artem Tyurin <artem.tyurin@gmail.com>",
   "license": "MIT",
@@ -22,44 +22,48 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "vite build && (cd ./example && vite)",
-    "build": "npm run clean && npm run compile && vite build && npm run build:example",
+    "build": "npm run clean && npm run compile && vite build",
     "compile": "tsc --noEmit && (cd ./example && tsc --noEmit)",
     "build:example": "vite build && (cd ./example && vite build)",
     "test": "npm run build && npm run lint && npm run test:e2e",
     "test:e2e": "playwright test",
     "format": "biome format --write",
     "lint": "biome check",
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
     "pdfjs-dist": "4.4.168",
-    "react-rnd": "^10.4.11",
+    "react-rnd": "^10.5.0",
     "ts-debounce": "^4.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agentcooper/react-pdf-highlighter.git"
+    "url": "git+https://github.com/loanbossinc/react-pdf-highlighter.git"
   },
   "bugs": {
-    "url": "https://github.com/agentcooper/react-pdf-highlighter/issues"
+    "url": "https://github.com/loanbossinc/react-pdf-highlighter/issues"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.0",
     "@playwright/test": "^1.45.1",
-    "@types/node": "^20.14.10",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.3",
     "playwright": "^1.45.1",
     "postcss-import": "^16.1.0",
+    "rimraf": "^6.1.3",
     "typescript": "^5.6.2",
-    "vite": "^5.3.3",
-    "vite-plugin-dts": "^4.1.1"
+    "vite": "^8.1.4",
+    "vite-plugin-dts": "^5.0.3"
   },
-  "homepage": "https://github.com/agentcooper/react-pdf-highlighter#readme"
+  "overrides": {
+    "@mapbox/node-pre-gyp": "^2.0.3"
+  },
+  "homepage": "https://github.com/loanbossinc/react-pdf-highlighter#readme"
 }

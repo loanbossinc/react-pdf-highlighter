@@ -1,7 +1,12 @@
 import type { PDFDocumentProxy } from "pdfjs-dist";
-import type { EventBus, PDFViewer } from "pdfjs-dist/legacy/web/pdf_viewer.mjs";
+import type {
+  EventBus,
+  PDFLinkService,
+  PDFViewer,
+} from "pdfjs-dist/legacy/web/pdf_viewer.mjs";
 import type { PDFViewerOptions } from "pdfjs-dist/types/web/pdf_viewer";
 import React, {
+  type JSX,
   type PointerEventHandler,
   PureComponent,
   type RefObject,
@@ -101,10 +106,11 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   };
 
   viewer!: PDFViewer;
+  linkService!: PDFLinkService;
 
   resizeObserver: ResizeObserver | null = null;
   containerNode?: HTMLDivElement | null = null;
-  containerNodeRef: RefObject<HTMLDivElement>;
+  containerNodeRef: RefObject<HTMLDivElement | null>;
   highlightRoots: {
     [page: number]: { reactRoot: Root; container: Element };
   } = {};
@@ -165,7 +171,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
     const pdfjs = await import("pdfjs-dist/web/pdf_viewer.mjs");
 
     const eventBus = new pdfjs.EventBus();
-    const linkService = new pdfjs.PDFLinkService({
+    this.linkService = new pdfjs.PDFLinkService({
       eventBus,
       externalLinkTarget: 2,
     });
@@ -182,12 +188,12 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
         // enhanceTextSelection: true, // deprecated. https://github.com/mozilla/pdf.js/issues/9943#issuecomment-409369485
         textLayerMode: 2,
         removePageBorders: true,
-        linkService: linkService,
+        linkService: this.linkService,
         ...pdfViewerOptions,
       });
 
-    linkService.setDocument(pdfDocument);
-    linkService.setViewer(this.viewer);
+    this.linkService.setDocument(pdfDocument);
+    this.linkService.setViewer(this.viewer);
     this.viewer.setDocument(pdfDocument);
 
     this.attachRef(eventBus);
@@ -561,7 +567,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
       <div onPointerDown={this.onMouseDown}>
         <div
           ref={this.containerNodeRef}
-          className={styles.container}
+          className={`PdfHighlighter ${styles.container}`}
           onContextMenu={(e) => e.preventDefault()}
         >
           <div className="pdfViewer" />

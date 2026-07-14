@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  type JSX,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "../style/TipContainer.module.css";
 import type { LTWHP } from "../types";
 

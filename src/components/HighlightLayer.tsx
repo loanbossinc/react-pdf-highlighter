@@ -1,4 +1,5 @@
 import type { PDFViewer } from "pdfjs-dist/web/pdf_viewer.mjs";
+import type { JSX } from "react";
 import { viewportToScaled } from "../lib/coordinates";
 import type {
   IHighlight,
