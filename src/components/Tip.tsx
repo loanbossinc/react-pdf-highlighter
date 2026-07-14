@@ -1,7 +1,5 @@
-import React from "react";
 import { Component } from "react";
-
-import "../style/Tip.css";
+import styles from "../style/Tip.module.css";
 
 interface State {
   compact: boolean;
@@ -23,7 +21,7 @@ export class Tip extends Component<Props, State> {
   };
 
   // for TipContainer
-  componentDidUpdate(nextProps: Props, nextState: State) {
+  componentDidUpdate(_: Props, nextState: State) {
     const { onUpdate } = this.props;
 
     if (onUpdate && this.state.compact !== nextState.compact) {
@@ -36,10 +34,10 @@ export class Tip extends Component<Props, State> {
     const { compact, text, emoji } = this.state;
 
     return (
-      <div className="Tip">
+      <div>
         {compact ? (
           <div
-            className="Tip__compact"
+            className={styles.compact}
             onClick={() => {
               onOpen();
               this.setState({ compact: false });
@@ -49,7 +47,7 @@ export class Tip extends Component<Props, State> {
           </div>
         ) : (
           <form
-            className="Tip__card"
+            className={styles.card}
             onSubmit={(event) => {
               event.preventDefault();
               onConfirm({ text, emoji });
@@ -58,6 +56,7 @@ export class Tip extends Component<Props, State> {
             <div>
               <textarea
                 placeholder="Your comment"
+                // biome-ignore lint/a11y/noAutofocus: This is an example app
                 autoFocus
                 value={text}
                 onChange={(event) =>
@@ -95,5 +94,3 @@ export class Tip extends Component<Props, State> {
     );
   }
 }
-
-export default Tip;

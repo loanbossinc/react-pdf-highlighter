@@ -1,6 +1,6 @@
 {
   "name": "@loanbossinc/react-pdf-highlighter",
-  "version": "5.4.0",
+  "version": "8.0.0",
   "description": "Set of React components for PDF annotation",
   "author": "Artem Tyurin <artem.tyurin@gmail.com>",
   "license": "MIT",
@@ -11,37 +11,35 @@
     "react-component"
   ],
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
-  "types": "./dist/esm/index.d.ts",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "style": "./dist/style.css",
   "scripts": {
     "start": "npm run dev",
-    "dev": "(cd ./example && vite)",
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:copy-styles && npm run build:example",
-    "build:lib": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:copy-styles",
-    "build:esm": "tsc",
-    "build:cjs": "tsc --module commonjs --outDir ./dist/cjs",
-    "build:copy-styles": "node -e \"const fs=require('fs');fs.cpSync('src/style','dist/esm/style',{recursive:true});fs.cpSync('src/style','dist/cjs/style',{recursive:true})\"",
-    "build:example": "(cd ./example && tsc && vite build)",
-    "test": "npm run format:check && jest --maxWorkers=1 -c jest.config.js",
-    "format": "prettier --write \"./**/*.{js,ts,tsx}\"",
-    "format:check": "prettier --check \"./**/*.{js,ts,tsx}\"",
+    "dev": "vite build && (cd ./example && vite)",
+    "build": "npm run clean && npm run compile && vite build",
+    "compile": "tsc --noEmit && (cd ./example && tsc --noEmit)",
+    "build:example": "vite build && (cd ./example && vite build)",
+    "test": "npm run build && npm run lint && npm run test:e2e",
+    "test:e2e": "playwright test",
+    "format": "biome format --write",
+    "lint": "biome check",
     "clean": "rimraf dist",
-    "prepublishOnly": "npm run build:lib"
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "react": ">=16.4.0 || ^18.0.0 || ^19.0.0",
-    "react-dom": ">=16.4.0 || ^18.0.0 || ^19.0.0"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.28.4",
-    "@types/lodash.debounce": "^4.0.6",
-    "@types/pdfjs-dist": "^2.7.4",
-    "lodash.debounce": "^4.0.8",
-    "pdfjs-dist": "2.8.335",
-    "react-rnd": "^10.5.0"
+    "pdfjs-dist": "4.4.168",
+    "react-rnd": "^10.5.0",
+    "ts-debounce": "^4.0.0"
   },
   "repository": {
     "type": "git",
@@ -51,17 +49,21 @@
     "url": "https://github.com/loanbossinc/react-pdf-highlighter/issues"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.0",
+    "@playwright/test": "^1.45.1",
+    "@types/node": "^24.13.3",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.3.4",
-    "jest": "^27.1.0",
-    "jest-puppeteer": "^5.0.4",
-    "prettier": "^2.3.2",
-    "puppeteer": "^9.1.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.3",
+    "playwright": "^1.45.1",
+    "postcss-import": "^16.1.0",
     "rimraf": "^6.1.3",
-    "typescript": "5.9.3",
-    "vite": "^5.4.0"
-  }
+    "typescript": "^5.6.2",
+    "vite": "^8.1.4",
+    "vite-plugin-dts": "^5.0.3"
+  },
+  "overrides": {
+    "@mapbox/node-pre-gyp": "^2.0.3"
+  },
+  "homepage": "https://github.com/loanbossinc/react-pdf-highlighter#readme"
 }

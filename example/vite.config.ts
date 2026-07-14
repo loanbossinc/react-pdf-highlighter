@@ -1,5 +1,5 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   base: "/react-pdf-highlighter/",
@@ -7,22 +7,10 @@ export default defineConfig({
     outDir: "dist",
   },
   plugins: [react()],
-  esbuild: { target: "es2019" },
-  optimizeDeps: { esbuildOptions: { target: "es2019" } },
   server: {
-    port: 3000,
-    strictPort: true,
-    proxy: {
-      "/pdf-proxy": {
-        target: "https://arxiv.org",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/pdf-proxy/, "/pdf"),
-        configure: (proxy, options) => {
-          proxy.on("proxyRes", (proxyRes) => {
-            proxyRes.headers["access-control-allow-origin"] = "*";
-          });
-        },
-      },
-    },
+    port: 3003,
+  },
+  define: {
+    APP_VERSION: JSON.stringify(process.env.npm_package_version),
   },
 });

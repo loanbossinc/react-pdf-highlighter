@@ -1,43 +1,85 @@
-export const getDocument = (elm: any): Document =>
-  (elm || {}).ownerDocument || document;
-export const getWindow = (elm: any): typeof window =>
-  (getDocument(elm) || {}).defaultView || window;
-export const isHTMLElement = (elm: any) =>
-  elm instanceof HTMLElement || elm instanceof getWindow(elm).HTMLElement;
-export const isHTMLCanvasElement = (elm: any) =>
-  elm instanceof HTMLCanvasElement ||
-  elm instanceof getWindow(elm).HTMLCanvasElement;
+import type { Page } from "../types";
 
-export const asElement = (x: any): HTMLElement => x;
+export const getDocument = (element: Element): Document =>
+  element.ownerDocument || document;
 
-export const getPageFromElement = (target: HTMLElement) => {
-  const node = asElement(target.closest(".page"));
+export const getWindow = (element: Element): typeof window =>
+  getDocument(element).defaultView || window;
 
-  if (!node || !isHTMLElement(node)) {
+export const isHTMLElement = (
+  element: Element | null,
+): element is HTMLElement =>
+  element != null &&
+  (element instanceof HTMLElement ||
+    element instanceof getWindow(element).HTMLElement);
+
+export const isHTMLCanvasElement = (element: Element) =>
+  element instanceof HTMLCanvasElement ||
+  element instanceof getWindow(element).HTMLCanvasElement;
+
+export const getPageFromElement = (target: HTMLElement): Page | null => {
+  const node = target.closest(".page");
+
+  if (!isHTMLElement(node)) {
     return null;
   }
 
-  const number = Number(asElement(node).dataset.pageNumber);
+  const number = Number(node.dataset.pageNumber);
 
-  return { node, number };
+  return { node, number } as Page;
 };
 
-export const getPageFromRange = (range: Range) => {
-  const parentElement = range.startContainer.parentElement;
+export const getPagesFromRange = (range: Range): Page[] => {
+  const startParentElement = range.startContainer.parentElement;
+  const endParentElement = range.endContainer.parentElement;
 
-  if (!isHTMLElement(parentElement)) {
-    return undefined;
+  if (!isHTMLElement(startParentElement) || !isHTMLElement(endParentElement)) {
+    return [];
   }
 
-  return getPageFromElement(asElement(parentElement));
+  const startPage = getPageFromElement(startParentElement);
+  const endPage = getPageFromElement(endParentElement);
+
+  if (!startPage?.number || !endPage?.number) {
+    return [];
+  }
+
+  if (startPage.number === endPage.number) {
+    return [startPage];
+  }
+
+  if (startPage.number === endPage.number - 1) {
+    return [startPage, endPage];
+  }
+
+  const pages: Page[] = [];
+
+  let currentPageNumber = startPage.number;
+
+  const document = startPage.node.ownerDocument;
+
+  while (currentPageNumber <= endPage.number) {
+    const currentPage = getPageFromElement(
+      document.querySelector(
+        `[data-page-number='${currentPageNumber}'`,
+      ) as HTMLElement,
+    );
+    if (currentPage) {
+      pages.push(currentPage);
+    }
+    currentPageNumber++;
+  }
+
+  return pages;
 };
 
 export const findOrCreateContainerLayer = (
   container: HTMLElement,
-  className: string
+  className: string,
+  selector?: string,
 ) => {
   const doc = getDocument(container);
-  let layer = container.querySelector(`.${className}`);
+  let layer = container.querySelector(selector ? selector : `.${className}`);
 
   if (!layer) {
     layer = doc.createElement("div");

@@ -1,4 +1,3 @@
-import React from "react";
 import type { IHighlight } from "./react-pdf-highlighter";
 
 interface Props {
@@ -11,6 +10,8 @@ const updateHash = (highlight: IHighlight) => {
   document.location.hash = `highlight-${highlight.id}`;
 };
 
+declare const APP_VERSION: string;
+
 export function Sidebar({
   highlights,
   toggleDocument,
@@ -19,7 +20,9 @@ export function Sidebar({
   return (
     <div className="sidebar" style={{ width: "25vw" }}>
       <div className="description" style={{ padding: "1rem" }}>
-        <h2 style={{ marginBottom: "1rem" }}>react-pdf-highlighter</h2>
+        <h2 style={{ marginBottom: "1rem" }}>
+          react-pdf-highlighter {APP_VERSION}
+        </h2>
 
         <p style={{ fontSize: "0.7rem" }}>
           <a href="https://github.com/agentcooper/react-pdf-highlighter">
@@ -38,6 +41,7 @@ export function Sidebar({
       <ul className="sidebar__highlights">
         {highlights.map((highlight, index) => (
           <li
+            // biome-ignore lint/suspicious/noArrayIndexKey: This is an example app
             key={index}
             className="sidebar__highlight"
             onClick={() => {
@@ -67,11 +71,15 @@ export function Sidebar({
         ))}
       </ul>
       <div style={{ padding: "1rem" }}>
-        <button onClick={toggleDocument}>Toggle PDF document</button>
+        <button type="button" onClick={toggleDocument}>
+          Toggle PDF document
+        </button>
       </div>
       {highlights.length > 0 ? (
         <div style={{ padding: "1rem" }}>
-          <button onClick={resetHighlights}>Reset highlights</button>
+          <button type="button" onClick={resetHighlights}>
+            Reset highlights
+          </button>
         </div>
       ) : null}
     </div>

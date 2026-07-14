@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, type JSX } from "react";
 
 interface Props {
   onMoveAway: () => void;
   paddingX: number;
   paddingY: number;
-  children: React.JSX.Element;
+  children: JSX.Element;
 }
 
-class MouseMonitor extends Component<Props> {
+export class MouseMonitor extends Component<Props> {
   container: HTMLDivElement | null = null;
   unsubscribe = () => {};
 
@@ -58,5 +58,3 @@ class MouseMonitor extends Component<Props> {
     );
   }
 }
-
-export default MouseMonitor;
