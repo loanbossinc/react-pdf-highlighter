@@ -1,13 +1,10 @@
-import React, { Component } from "react";
-
-import "../style/Highlight.css";
-
-import type { LTWH } from "../types.js";
+import styles from "../style/Highlight.module.css";
+import type { LTWHP } from "../types.js";
 
 interface Props {
   position: {
-    boundingRect: LTWH;
-    rects: Array<LTWH>;
+    boundingRect: LTWHP;
+    rects: Array<LTWHP>;
   };
   onClick?: () => void;
   onMouseOver?: () => void;
@@ -19,49 +16,44 @@ interface Props {
   isScrolledTo: boolean;
 }
 
-export class Highlight extends Component<Props> {
-  render() {
-    const {
-      position,
-      onClick,
-      onMouseOver,
-      onMouseOut,
-      comment,
-      isScrolledTo,
-    } = this.props;
+export function Highlight({
+  position,
+  onClick,
+  onMouseOver,
+  onMouseOut,
+  comment,
+  isScrolledTo,
+}: Props) {
+  const { rects, boundingRect } = position;
 
-    const { rects, boundingRect } = position;
-
-    return (
-      <div
-        className={`Highlight ${isScrolledTo ? "Highlight--scrolledTo" : ""}`}
-      >
-        {comment ? (
-          <div
-            className="Highlight__emoji"
-            style={{
-              left: 20,
-              top: boundingRect.top,
-            }}
-          >
-            {comment.emoji}
-          </div>
-        ) : null}
-        <div className="Highlight__parts">
-          {rects.map((rect, index) => (
-            <div
-              onMouseOver={onMouseOver}
-              onMouseOut={onMouseOut}
-              onClick={onClick}
-              key={index}
-              style={rect}
-              className={`Highlight__part`}
-            />
-          ))}
+  return (
+    <div
+      className={`Highlight ${styles.highlight} ${isScrolledTo ? styles.scrolledTo : ""}`}
+    >
+      {comment ? (
+        <div
+          className={`Highlight__emoji ${styles.emoji}`}
+          style={{
+            left: 20,
+            top: boundingRect.top,
+          }}
+        >
+          {comment.emoji}
         </div>
+      ) : null}
+      <div className={`Highlight__parts ${styles.parts}`}>
+        {rects.map((rect, index) => (
+          <div
+            onMouseOver={onMouseOver}
+            onMouseOut={onMouseOut}
+            onClick={onClick}
+            // biome-ignore lint/suspicious/noArrayIndexKey: We can use position hash at some point in future
+            key={index}
+            style={rect}
+            className={`Highlight__part ${styles.part}`}
+          />
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
 }
-
-export default Highlight;
