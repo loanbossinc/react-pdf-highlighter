@@ -7,10 +7,10 @@
     "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "noUnusedParameters": false,
     "noImplicitReturns": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
     "outDir": "./dist/esm",
     "isolatedModules": true,
     "declaration": true

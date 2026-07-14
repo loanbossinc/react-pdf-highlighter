@@ -8,7 +8,7 @@ interface State {
 }
 
 interface Props {
-  children: React.JSX.Element | null;
+  children: JSX.Element | null;
   style: { top: number; left: number; bottom: number };
   scrollTop: number;
   pageBoundingRect: LTWH;

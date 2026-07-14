@@ -1,5 +1,5 @@
 export const testHighlights = {
-  "/pdf-proxy/1708.08021": [
+  "https://arxiv.org/pdf/1708.08021.pdf": [
     {
       content: {
         text: " Type Checking for JavaScript",

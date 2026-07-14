@@ -1,6 +1,5 @@
-import React from "react";
-import { PointerEventHandler, PureComponent } from "react";
-import { createRoot, Root } from "react-dom/client";
+import React, { PointerEventHandler, PureComponent } from "react";
+import ReactDom from "react-dom";
 import debounce from "lodash.debounce";
 
 import {
@@ -56,10 +55,10 @@ interface State<T_HT> {
   range: Range | null;
   tip: {
     highlight: T_ViewportHighlight<T_HT>;
-    callback: (highlight: T_ViewportHighlight<T_HT>) => React.JSX.Element;
+    callback: (highlight: T_ViewportHighlight<T_HT>) => JSX.Element;
   } | null;
   tipPosition: Position | null;
-  tipChildren: React.JSX.Element | null;
+  tipChildren: JSX.Element | null;
   isAreaSelectionInProgress: boolean;
   scrolledToHighlightId: string;
 }
@@ -70,13 +69,13 @@ interface Props<T_HT> {
     index: number,
     setTip: (
       highlight: T_ViewportHighlight<T_HT>,
-      callback: (highlight: T_ViewportHighlight<T_HT>) => React.JSX.Element
+      callback: (highlight: T_ViewportHighlight<T_HT>) => JSX.Element
     ) => void,
     hideTip: () => void,
     viewportToScaled: (rect: LTWH) => Scaled,
     screenshot: (position: LTWH) => string,
     isScrolledTo: boolean
-  ) => React.JSX.Element;
+  ) => JSX.Element;
   highlights: Array<T_HT>;
   onScrollChange: () => void;
   scrollRef: (scrollTo: (highlight: IHighlight) => void) => void;
@@ -87,7 +86,7 @@ interface Props<T_HT> {
     content: { text?: string; image?: string },
     hideTipAndSelection: () => void,
     transformSelection: () => void
-  ) => React.JSX.Element | null;
+  ) => JSX.Element | null;
   enableAreaSelection: (event: MouseEvent) => boolean;
 }
 
@@ -124,7 +123,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   resizeObserver: ResizeObserver | null = null;
   containerNode?: HTMLDivElement | null = null;
   unsubscribe = () => {};
-  highlightRoots: Map<number, Root> = new Map();
 
   constructor(props: Props<T_HT>) {
     super(props);
@@ -178,12 +176,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   init() {
     const { pdfDocument } = this.props;
 
-    // Clean up existing roots when loading a new PDF
-    this.highlightRoots.forEach((root) => {
-      root.unmount();
-    });
-    this.highlightRoots.clear();
-
     this.viewer =
       this.viewer ||
       new PDFViewer({
@@ -204,11 +196,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   componentWillUnmount() {
     this.unsubscribe();
-    // Clean up all React roots
-    this.highlightRoots.forEach((root) => {
-      root.unmount();
-    });
-    this.highlightRoots.clear();
   }
 
   findOrCreateHighlightLayer(page: number) {
@@ -241,7 +228,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
       }, {} as Record<number, any[]>);
   }
 
-  showTip(highlight: T_ViewportHighlight<T_HT>, content: React.JSX.Element) {
+  showTip(highlight: T_ViewportHighlight<T_HT>, content: JSX.Element) {
     const { isCollapsed, ghostHighlight, isAreaSelectionInProgress } =
       this.state;
 
@@ -304,14 +291,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
       const highlightLayer = this.findOrCreateHighlightLayer(pageNumber);
 
       if (highlightLayer) {
-        // Get or create root for this page
-        let root = this.highlightRoots.get(pageNumber);
-        if (!root) {
-          root = createRoot(highlightLayer);
-          this.highlightRoots.set(pageNumber, root);
-        }
-
-        root.render(
+        ReactDom.render(
           <div>
             {(highlightsByPage[String(pageNumber)] || []).map(
               ({ position, id, ...highlight }, index) => {
@@ -351,7 +331,8 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
                 );
               }
             )}
-          </div>
+          </div>,
+          highlightLayer
         );
       }
     }
@@ -368,7 +349,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
     );
   };
 
-  setTip(position: Position, inner: React.JSX.Element | null) {
+  setTip(position: Position, inner: JSX.Element | null) {
     this.setState({
       tipPosition: position,
       tipChildren: inner,
