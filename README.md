@@ -1,36 +1,20 @@
-☕️ [Buy me a coffee](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SC4D2NS8G2JJ8&source=url)
-
-![Node CI](https://github.com/agentcooper/react-pdf-highlighter/workflows/Node%20CI/badge.svg)
+![Node CI](https://github.com/loanbossinc/react-pdf-highlighter/workflows/Node%20CI/badge.svg)
 
 # react-pdf-highlighter
 
-Set of React components for PDF annotation.
+A set of React components for PDF annotation, maintained by LoanBoss. Forked from [agentcooper/react-pdf-highlighter](https://github.com/agentcooper/react-pdf-highlighter).
 
-Features:
+## Features
 
 - Built on top of PDF.js
 - Text and image highlights
 - Popover text for highlights
 - Scroll to highlights
 
-## Importing CSS
+## Prerequisites
 
-The bundled CSS include the CSS for pdfjs.
-
-```tsx
-import "react-pdf-highlighter/dist/style.css";
-```
-
-## Example
-
-See demo https://agentcooper.github.io/react-pdf-highlighter/.
-
-To run the example app locally:
-
-```bash
-npm install
-npm start
-```
+- Node.js (see [`.nvmrc`](.nvmrc) for the required version) <!-- TODO: verify exact version -->
+- npm
 
 ## Install
 
@@ -38,6 +22,54 @@ npm start
 npm install react-pdf-highlighter
 ```
 
-## How to use
+## Importing CSS
 
-See [`./example/src/App.tsx`](https://github.com/agentcooper/react-pdf-highlighter/blob/main/example/src/App.tsx) for the React component API example.
+The bundled CSS includes styles for PDF.js. Import it once at your app entry point:
+
+```tsx
+import "react-pdf-highlighter/dist/style.css";
+```
+
+## Usage
+
+See [`./example/src/App.tsx`](./example/src/App.tsx) for a full component API example.
+
+Key components exported from the package:
+
+- `PdfHighlighter` — main viewer component
+- `Highlight` / `AreaHighlight` — highlight renderers
+- `Popup` — popover component for highlight annotations
+- `Tip` — inline tip component
+
+See [`src/index.ts`](./src/index.ts) for the full public API surface.
+
+## Running the Example App Locally
+
+```bash
+npm install
+npm start
+```
+
+The example app runs via Vite and opens at `http://localhost:5173` by default. <!-- TODO: verify port -->
+
+## Development
+
+### Build the library
+
+```bash
+npm run build
+```
+
+### Lint and format
+
+This project uses [Biome](https://biomejs.dev/) for linting and formatting:
+
+```bash
+npx biome check .
+```
+
+### End-to-end tests
+
+```bash
+npx playwright test
+```
